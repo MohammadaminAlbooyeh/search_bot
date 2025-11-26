@@ -40,6 +40,12 @@ from whoosh.writing import IndexWriter
 from ..utils.config import get_config
 
 
+def _default_tags():
+    return []
+
+def _default_metadata():
+    return {}
+
 @dataclass
 class DocumentInfo:
     """Information about an indexed document."""
@@ -53,8 +59,8 @@ class DocumentInfo:
     content: str = ""
     word_count: int = 0
     language: str = "en"
-    tags: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    tags: List[str] = field(default_factory=_default_tags)
+    metadata: Dict[str, Any] = field(default_factory=_default_metadata)
 
 
 class DocumentProcessor:

@@ -115,8 +115,21 @@ jobs:
         python -c "
         import sys
         sys.path.insert(0, 'src')
-        from src import SearchEngine, DocumentIndexer, ResponseHandler, Config
-        print('✅ All modules import successfully')
+        try:
+            from src.utils.config import Config
+            print('✅ Config module imported')
+            from src.data.indexer import DocumentIndexer
+            print('✅ DocumentIndexer imported')
+            from src.bot.search_engine import SearchEngine
+            print('✅ SearchEngine imported')
+            from src.bot.response_handler import ResponseHandler
+            print('✅ ResponseHandler imported')
+            print('✅ All modules import successfully')
+        except Exception as e:
+            print(f'❌ Import failed: {e}')
+            import traceback
+            traceback.print_exc()
+            sys.exit(1)
         "
         
     - name: Validate project structure

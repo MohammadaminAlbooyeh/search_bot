@@ -11,6 +11,12 @@ import sys
 import os
 from pathlib import Path
 
+# Check Python version compatibility
+if sys.version_info < (3, 8):
+    print("Error: This application requires Python 3.8 or higher.")
+    print(f"Current Python version: {sys.version}")
+    sys.exit(1)
+
 # Add the src directory to the Python path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 

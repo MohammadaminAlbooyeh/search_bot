@@ -56,6 +56,9 @@ class SearchResult:
     rank: int = 0
 
 
+def _default_search_fields():
+    return ["title", "content", "filename", "tags"]
+
 @dataclass
 class SearchQuery:
     """Represents a processed search query."""
@@ -65,7 +68,7 @@ class SearchQuery:
     phrases: List[str]
     filters: Dict[str, Any]
     search_type: str = "standard"  # standard, fuzzy, wildcard, phrase, boolean
-    fields: List[str] = field(default_factory=lambda: ["title", "content", "filename", "tags"])
+    fields: List[str] = field(default_factory=_default_search_fields)
 
 
 @dataclass

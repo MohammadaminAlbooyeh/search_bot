@@ -40,24 +40,29 @@ class SearchConfig:
     snippet_length: int = 200
 
 
+def _default_supported_formats():
+    return [".txt", ".md", ".py", ".js", ".html", ".css", ".json", ".xml", ".csv"]
+
+def _default_exclude_patterns():
+    return ["*.pyc", "*.log", "*.tmp", "__pycache__", ".git", ".vscode", "node_modules"]
+
 @dataclass
 class IndexingConfig:
     """Configuration for document indexing."""
-    supported_formats: List[str] = field(default_factory=lambda: [
-        ".txt", ".md", ".py", ".js", ".html", ".css", ".json", ".xml", ".csv"
-    ])
+    supported_formats: List[str] = field(default_factory=_default_supported_formats)
     max_file_size_mb: int = 50
     batch_size: int = 100
     auto_index: bool = True
     recursive_scan: bool = True
     ignore_hidden_files: bool = True
-    exclude_patterns: List[str] = field(default_factory=lambda: [
-        "*.pyc", "*.log", "*.tmp", "__pycache__", ".git", ".vscode", "node_modules"
-    ])
+    exclude_patterns: List[str] = field(default_factory=_default_exclude_patterns)
     text_encoding: str = "utf-8"
     min_word_length: int = 3
     max_word_length: int = 50
 
+
+def _default_custom_stopwords():
+    return ["bot", "search", "document", "file"]
 
 @dataclass
 class NLPConfig:
@@ -68,10 +73,16 @@ class NLPConfig:
     enable_pos_tagging: bool = True
     remove_stopwords: bool = True
     enable_lemmatization: bool = True
-    custom_stopwords: List[str] = field(default_factory=lambda: [
-        "bot", "search", "document", "file"
-    ])
+    custom_stopwords: List[str] = field(default_factory=_default_custom_stopwords)
 
+
+def _default_response_templates():
+    return {
+        "no_results": "Sorry, I couldn't find any documents matching your query: '{query}'",
+        "single_result": "I found 1 document related to your query:",
+        "multiple_results": "I found {count} documents related to your query:",
+        "error": "An error occurred while processing your request: {error}"
+    }
 
 @dataclass
 class ResponseConfig:
@@ -80,12 +91,7 @@ class ResponseConfig:
     include_source_info: bool = True
     include_relevance_score: bool = True
     format: str = "markdown"
-    templates: Dict[str, str] = field(default_factory=lambda: {
-        "no_results": "Sorry, I couldn't find any documents matching your query: '{query}'",
-        "single_result": "I found 1 document related to your query:",
-        "multiple_results": "I found {count} documents related to your query:",
-        "error": "An error occurred while processing your request: {error}"
-    })
+    templates: Dict[str, str] = field(default_factory=_default_response_templates)
 
 
 @dataclass
@@ -99,17 +105,19 @@ class PerformanceConfig:
     memory_limit_mb: int = 512
 
 
+def _default_allowed_file_types():
+    return [".txt", ".md", ".py", ".js", ".html", ".css", ".json", ".xml", ".csv"]
+
+def _default_blocked_extensions():
+    return [".exe", ".bat", ".sh", ".ps1"]
+
 @dataclass
 class SecurityConfig:
     """Configuration for security settings."""
     max_query_length: int = 500
     rate_limit_requests_per_minute: int = 60
-    allowed_file_types: List[str] = field(default_factory=lambda: [
-        ".txt", ".md", ".py", ".js", ".html", ".css", ".json", ".xml", ".csv"
-    ])
-    blocked_extensions: List[str] = field(default_factory=lambda: [
-        ".exe", ".bat", ".sh", ".ps1"
-    ])
+    allowed_file_types: List[str] = field(default_factory=_default_allowed_file_types)
+    blocked_extensions: List[str] = field(default_factory=_default_blocked_extensions)
     sanitize_input: bool = True
     log_queries: bool = True
 

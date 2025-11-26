@@ -33,17 +33,17 @@ fastapi>=0.70.0; extra == 'api'
 uvicorn>=0.15.0; extra == 'api'
 
 # Testing dependencies
-pytest>=7.0.0
-pytest-cov>=4.0.0
-pytest-mock>=3.8.0
-coverage>=6.4.0
+pytest>=6.2.0
+pytest-cov>=3.0.0
+pytest-mock>=3.6.0
+coverage>=5.5.0
 
 # Development and code quality
-black>=22.0.0
-flake8>=5.0.0
-isort>=5.10.0
-mypy>=0.971
-pre-commit>=2.20.0
+black>=21.0.0
+flake8>=4.0.0
+isort>=5.8.0
+mypy>=0.910
+pre-commit>=2.15.0
 
 # Security scanning
 safety>=2.1.0
