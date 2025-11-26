@@ -1,0 +1,134 @@
+{
+  "application": {
+    "name": "Search Bot",
+    "version": "1.0.0",
+    "description": "Intelligent document search and retrieval bot",
+    "debug": false,
+    "log_level": "INFO"
+  },
+  
+  "paths": {
+    "documents_dir": "./data/documents",
+    "index_dir": "./data/index", 
+    "cache_dir": "./data/cache",
+    "logs_dir": "./logs",
+    "temp_dir": "./tmp"
+  },
+  
+  "indexing": {
+    "supported_formats": [".txt", ".md", ".py", ".js", ".html", ".css", ".json", ".xml", ".csv"],
+    "max_file_size_mb": 50,
+    "batch_size": 100,
+    "auto_index": true,
+    "recursive_scan": true,
+    "ignore_hidden_files": true,
+    "exclude_patterns": ["*.pyc", "*.log", "*.tmp", "__pycache__", ".git", ".vscode", "node_modules"],
+    "text_encoding": "utf-8",
+    "min_word_length": 3,
+    "max_word_length": 50
+  },
+  
+  "search": {
+    "engine_type": "whoosh",
+    "max_results": 20,
+    "min_score": 0.1,
+    "fuzzy_matching": true,
+    "stemming": true,
+    "case_sensitive": false,
+    "phrase_search": true,
+    "wildcard_search": true,
+    "boolean_operators": true,
+    "highlight_matches": true,
+    "snippet_length": 200
+  },
+  
+  "nlp": {
+    "language": "en",
+    "spacy_model": "en_core_web_sm",
+    "enable_ner": true,
+    "enable_pos_tagging": true,
+    "remove_stopwords": true,
+    "enable_lemmatization": true,
+    "custom_stopwords": ["bot", "search", "document", "file"]
+  },
+  
+  "response": {
+    "max_response_length": 1000,
+    "include_source_info": true,
+    "include_relevance_score": true,
+    "format": "markdown",
+    "templates": {
+      "no_results": "Sorry, I couldn't find any documents matching your query: '{query}'",
+      "single_result": "I found 1 document related to your query:",
+      "multiple_results": "I found {count} documents related to your query:",
+      "error": "An error occurred while processing your request: {error}"
+    }
+  },
+  
+  "performance": {
+    "cache_enabled": true,
+    "cache_ttl_seconds": 3600,
+    "max_concurrent_searches": 5,
+    "search_timeout_seconds": 30,
+    "index_update_interval": 300,
+    "memory_limit_mb": 512
+  },
+  
+  "security": {
+    "max_query_length": 500,
+    "rate_limit_requests_per_minute": 60,
+    "allowed_file_types": [".txt", ".md", ".py", ".js", ".html", ".css", ".json", ".xml", ".csv"],
+    "blocked_extensions": [".exe", ".bat", ".sh", ".ps1"],
+    "sanitize_input": true,
+    "log_queries": true
+  },
+  
+  "api": {
+    "host": "localhost",
+    "port": 5000,
+    "cors_enabled": true,
+    "api_key_required": false,
+    "rate_limiting": true,
+    "request_logging": true
+  },
+  
+  "database": {
+    "type": "file",
+    "connection": {
+      "sqlite_path": "./data/search_bot.db",
+      "mongodb_uri": "mongodb://localhost:27017/search_bot",
+      "elasticsearch_hosts": ["http://localhost:9200"]
+    },
+    "backup_enabled": true,
+    "backup_interval_hours": 24
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_enabled": true,
+    "console_enabled": true,
+    "max_file_size_mb": 10,
+    "backup_count": 5,
+    "log_queries": false,
+    "log_results": false
+  },
+  
+  "features": {
+    "web_interface": false,
+    "rest_api": false,
+    "auto_suggestions": true,
+    "search_history": true,
+    "export_results": true,
+    "bulk_operations": true,
+    "scheduled_indexing": false
+  },
+  
+  "experimental": {
+    "ai_enhanced_search": false,
+    "semantic_similarity": false,
+    "auto_categorization": false,
+    "sentiment_analysis": false,
+    "content_summarization": false
+  }
+}

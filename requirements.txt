@@ -1,0 +1,58 @@
+# Core dependencies for search bot functionality
+numpy>=1.21.0
+scipy>=1.7.0
+scikit-learn>=1.0.0
+nltk>=3.7
+spacy>=3.4.0
+
+# Text processing and NLP
+beautifulsoup4>=4.11.0
+lxml>=4.9.0
+textblob>=0.17.0
+python-docx>=0.8.11
+PyPDF2>=3.0.0
+markdown>=3.4.0
+
+# Data handling
+pandas>=1.4.0
+pathlib2>=2.3.7; python_version < '3.4'
+
+# Configuration and utilities
+pyyaml>=6.0
+python-dotenv>=0.19.0
+click>=8.0.0
+
+# Search and indexing
+whoosh>=2.7.4
+elasticsearch>=8.0.0; extra == 'elasticsearch'
+pymongo>=4.0.0; extra == 'mongodb'
+
+# Web framework (optional for web interface)
+flask>=2.2.0; extra == 'web'
+fastapi>=0.85.0; extra == 'api'
+uvicorn>=0.18.0; extra == 'api'
+
+# Testing dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.8.0
+coverage>=6.4.0
+
+# Development and code quality
+black>=22.0.0
+flake8>=5.0.0
+isort>=5.10.0
+mypy>=0.971
+pre-commit>=2.20.0
+
+# Security scanning
+safety>=2.1.0
+bandit>=1.7.4
+
+# Documentation
+sphinx>=5.0.0; extra == 'docs'
+sphinx-rtd-theme>=1.0.0; extra == 'docs'
+
+# Performance and monitoring
+psutil>=5.9.0
+memory-profiler>=0.60.0
