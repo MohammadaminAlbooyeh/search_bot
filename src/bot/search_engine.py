@@ -22,9 +22,20 @@ from whoosh.qparser import MultifieldParser, QueryParser, OrGroup, AndGroup
 from whoosh.query import Query, Term, And, Or, Not, Phrase, Wildcard, FuzzyTerm
 from whoosh.scoring import BM25F, TF_IDF, Frequency
 from whoosh.analysis import StemmingAnalyzer, StandardAnalyzer
-from whoosh.highlight import SimpleFragmenter, ContextFragmenter, highlight
 from whoosh.collectors import TimeLimitCollector, TermsCollector
 import whoosh.qparser as qparser
+
+# Import highlight functionality with fallback
+try:
+    from whoosh import highlight
+    HIGHLIGHT_AVAILABLE = True
+except ImportError:
+    try:
+        import whoosh.highlight as highlight
+        HIGHLIGHT_AVAILABLE = True
+    except ImportError:
+        HIGHLIGHT_AVAILABLE = False
+        highlight = None
 
 # NLP imports
 import nltk
@@ -523,17 +534,26 @@ class SearchEngine:
         highlights = {}
         
         try:
-            # Highlight content
-            if hasattr(result, 'highlights'):
+            if HIGHLIGHT_AVAILABLE and hasattr(result, 'highlights'):
+                # Highlight content
                 content_highlight = result.highlights('content', maxchars=self.config.search.snippet_length)
                 if content_highlight:
                     highlights['content'] = content_highlight
-            
-            # Highlight title
-            if hasattr(result, 'highlights'):
+                
+                # Highlight title
                 title_highlight = result.highlights('title', maxchars=100)
                 if title_highlight:
                     highlights['title'] = title_highlight
+            else:
+                # Fallback: use plain text snippets
+                if hasattr(result, 'get') and result.get('content'):
+                    content = result.get('content', '')
+                    # Simple snippet extraction
+                    snippet_length = self.config.search.snippet_length
+                    highlights['content'] = content[:snippet_length] + '...' if len(content) > snippet_length else content
+                
+                if hasattr(result, 'get') and result.get('title'):
+                    highlights['title'] = result.get('title', '')[:100]
                     
         except Exception as e:
             self.logger.debug(f"Error extracting highlights: {e}")

@@ -3,7 +3,7 @@
 # Core dependencies
 numpy>=1.19.0,<1.25.0
 nltk>=3.6,<4.0
-whoosh>=2.7.4
+whoosh>=2.7.4,<3.0.0
 
 # Text processing
 beautifulsoup4>=4.11.0
