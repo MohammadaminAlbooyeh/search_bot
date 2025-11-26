@@ -22,7 +22,14 @@ import nltk
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
-import spacy
+
+# Optional spaCy import
+try:
+    import spacy
+    SPACY_AVAILABLE = True
+except ImportError:
+    SPACY_AVAILABLE = False
+    spacy = None
 
 # File processing imports
 import PyPDF2
@@ -90,10 +97,14 @@ class DocumentProcessor:
                 self.stop_words.update(self.config.nlp.custom_stopwords)
             
             # Initialize spaCy if available
-            try:
-                self.nlp = spacy.load(self.config.nlp.spacy_model)
-            except OSError:
-                self.logger.warning(f"SpaCy model '{self.config.nlp.spacy_model}' not found. Install with: python -m spacy download {self.config.nlp.spacy_model}")
+            if SPACY_AVAILABLE:
+                try:
+                    self.nlp = spacy.load(self.config.nlp.spacy_model)
+                except OSError:
+                    self.logger.warning(f"SpaCy model '{self.config.nlp.spacy_model}' not found. Install with: python -m spacy download {self.config.nlp.spacy_model}")
+                    self.nlp = None
+            else:
+                self.logger.info("SpaCy not available. Using NLTK for text processing.")
                 self.nlp = None
                 
         except Exception as e:

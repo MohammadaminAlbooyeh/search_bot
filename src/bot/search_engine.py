@@ -31,7 +31,14 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
-import spacy
+
+# Optional spaCy import
+try:
+    import spacy
+    SPACY_AVAILABLE = True
+except ImportError:
+    SPACY_AVAILABLE = False
+    spacy = None
 
 # Configuration
 from ..utils.config import get_config
@@ -112,10 +119,14 @@ class QueryProcessor:
                 self.stop_words.update(self.config.nlp.custom_stopwords)
             
             # Initialize spaCy if available
-            try:
-                self.nlp = spacy.load(self.config.nlp.spacy_model)
-            except OSError:
-                self.logger.warning("SpaCy model not available, using basic processing")
+            if SPACY_AVAILABLE:
+                try:
+                    self.nlp = spacy.load(self.config.nlp.spacy_model)
+                except OSError:
+                    self.logger.warning("SpaCy model not available, using basic processing")
+                    self.nlp = None
+            else:
+                self.logger.info("SpaCy not available. Using NLTK for query processing.")
                 self.nlp = None
                 
         except Exception as e:
