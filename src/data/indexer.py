@@ -37,11 +37,26 @@ from docx import Document as DocxDocument
 from bs4 import BeautifulSoup
 import markdown
 
-# Search engine imports
-from whoosh.index import create_index, open_dir, exists_in
+# Search engine imports with compatibility fallbacks
+try:
+    from whoosh.index import create_index, open_dir, exists_in
+except ImportError:
+    try:
+        from whoosh.index import open_dir, exists_in
+        from whoosh.index import create as create_index
+    except ImportError:
+        from whoosh import index
+        create_index = index.create
+        open_dir = index.open_dir  
+        exists_in = index.exists_in
+
 from whoosh.fields import Schema, TEXT, ID, DATETIME, NUMERIC, KEYWORD
 from whoosh.analysis import StandardAnalyzer, StemmingAnalyzer
-from whoosh.writing import IndexWriter
+
+try:
+    from whoosh.writing import IndexWriter
+except ImportError:
+    from whoosh.writing import AsyncWriter as IndexWriter
 
 # Configuration
 from ..utils.config import get_config
@@ -365,7 +380,6 @@ class DocumentIndexer:
             
             # Create or open index
             if exists_in(str(index_dir)):
-                from whoosh.index import open_dir
                 self.index = open_dir(str(index_dir))
                 self.logger.info(f"Opened existing search index at {index_dir}")
             else:
@@ -554,7 +568,10 @@ class DocumentIndexer:
         """
         try:
             with self.index.searcher() as searcher:
-                from whoosh.qparser import MultifieldParser
+                try:
+                    from whoosh.qparser import MultifieldParser
+                except ImportError:
+                    from whoosh.qparser import QueryParser as MultifieldParser
                 
                 # Create query parser
                 parser = MultifieldParser(
